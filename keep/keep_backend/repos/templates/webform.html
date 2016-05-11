@@ -150,6 +150,9 @@
                 <div class="controls">
 
                 {% if field.type == 'group' %}
+ 				{% elif field.name == 'id' %} 
+		        	<!-- Make patient id non-editable. PM -->
+					 <span data-editor=""><input id="{{ field.name }}" name="{{ field.name }}" 	step="any" readonly="readonly"></span>
 
                 {% elif field.type == 'geopoint' %}
                   <!-- TODO -->
