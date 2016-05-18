@@ -68,10 +68,10 @@ class DataSerializer( object ):
                         link_dict[ linked_repo.name ] = 'empty'
                          #link_dict[ linked_repo.name ] = 'finished' #PM testing
                 ''' 
-                        
+                print "data id: ", data_id
                 copy['linked'] = link_dict
                 #check completion status, append result for display
-                
+                '''
                 count=db.data.find( {'$and':[ { 'data.weight':{ '$ne':''}, 
                                                   'data.func_transplant':{ '$ne':''} ,
                                                   'data.chronic_dial':{ '$ne':''},
@@ -80,80 +80,117 @@ class DataSerializer( object ):
                                                   'data.screening_day':{ '$ne':''},
                                                   #'data.country':{ '$ne':''},
                                                   'data.id':data_id,
-                                                  'label':'demographics' 
-                                                  } ]} ).count()  
-                          
-                if (count)==1:  
-                    copy['linked']['demographics']='complete'     
-                else:
-                    copy['linked']['demographics']='incomplete' 
-               
-                
-                if db.data.find( {'$and':[ { 'label':'demographics' ,
-                                             'data.id':data_id
-                                            } ]} ).count() ==0:
-                    copy['linked']['demographics']='empty'                                                                                               
-                         
-                count = db.data.find( {'$and':[ { 'data.diagnosis_day':{ '$ne':''}, 
-                                                  'data.patient_loc':{ '$ne':''} ,
-                                                  'data.develop_loc':{ '$ne':''},
-                                                  'data.urine_output_exists':{ '$ne':''},
-                                                  'data.urine_output':{ '$ne':''},
-                                                  'data.fluid_change_exists':{ '$ne':''},
-                                                  #'data.country':{ '$ne':''},
+                                                  'label':'initialclinicaldata'
+                                                   
+                                                  } ]} ).count() 
+                                                   
+                                          
+               if (count)==1:  
+                     copy['linked']['initialclinicaldata']='complete'     
+                  else:
+                    copy['linked']['initialclinicaldata']='incomplete' 
+           
+                if db.data.find( {'$and':[ { 'label':'initialclinicaldata' ,
+                                            'data.id':data_id
+                                           } ]} ).count() ==0:
+                   copy['linked']['initialclinicaldata']='empty'                                                                                               
+                 '''  
+                #INTIALCLINICALDATA                     
+                count = db.data.find( {'$and':[ { 'data.temperature':{ '$ne':''}, 
+                                                  'data.first_assessed_scr':{ '$ne':''} ,
+                                                  'data.specific_gravity':{ '$ne':''},
+                                                  'data.ph':{ '$ne':''},
                                                   'data.id':data_id,
-                                                  'label':'clinical_data' 
+                                                  'label':'initialclincaldata' 
                                                  } ]} ).count()           
                               
-                if (count)==1:  
-                    copy['linked']['clinical_data']='complete'     
+                if (count)>0:  
+                    copy['linked']['initialclinicaldata']='complete'     
                 else:
-                    copy['linked']['clinical_data']='incomplete' 
+                    copy['linked']['initialclinicaldata']='incomplete' 
                
                 
-                if db.data.find( {'$and':[ { 'label':'clinical_data' ,
+                if db.data.find( {'$and':[ { 'label':'initialclinicaldata' ,
                                              'data.id':data_id
                                             } ]} ).count() ==0:
-                    copy['linked']['clinical_data']='empty'
+                    copy['linked']['initialclinicaldata']='empty'
                     
-                
-                count = db.data.find( {'$and':[ { 'data.urinalysis':{ '$ne':''}, 
-                                                  'data.echography':{ '$ne':''} ,
-                                                  'data.fluid_therapy':{ '$ne':''},
-                                                  'data.fluid_site':{ '$ne':''},
+           
+                #DAILYCLINICALLABDATA
+                count = db.data.find( {'$and':[ { 'data.ph':{ '$ne':''}, 
+                                                  'data.specific_gravity':{ '$ne':''} ,
+                                                  'data.bun_val':{ '$ne':''},
+                                                  'data.scr_value':{ '$ne':''},
+                                                  'hct':{ '$ne':''},
+                                                  'temperature':{ '$ne':''},
                                                   'data.id':data_id,
-                                                  'label':'diagnostic_treatment' 
+                                                  'label':'dailyclinicallabdata' 
+                                                 } ]} ).count()           
+                               
+                if (count)>0:  
+                    copy['linked']['dailyclinicallabdata']='complete'     
+                else:
+                    copy['linked']['dailyclinicallabdata']='incomplete'             
+                
+               
+                if db.data.find( {'$and':[ { 'label':'dailyclinicallabdata' , 'data.id':data_id } ]} ).count() ==0:
+                    copy['linked']['dailyclinicallabdata']='empty'                   
+           
+           
+                #TELECONSULTATION
+                count = db.data.find( {'$and':[ { 'data.most_important':{ '$ne':''}, 
+                                                  'data.id':data_id,
+                                                  'label':'teleconsultation' 
                                                  } ]} ).count()           
                                
                 if (count)==1:  
-                    copy['linked']['diagnostic_treatment']='complete'     
+                    copy['linked']['teleconsultation']='complete'     
                 else:
-                    copy['linked']['diagnostic_treatment']='incomplete' 
+                    copy['linked']['teleconsultation']='incomplete' 
                
                 
-                if db.data.find( {'$and':[ { 'label':'diagnostic_treatment' ,
+                if db.data.find( {'$and':[ { 'label':'teleconsultation' ,
                                              'data.id':data_id
                                             } ]} ).count() ==0:
-                    copy['linked']['diagnostic_treatment']='empty'                   
-                
-                count = db.data.find( {'$and':[ { 'data.num_days':{ '$ne':''}, 
-                                                  'data.any_renal_replace':{ '$ne':''} ,
-                                                  'why_no_dialytic':{ '$ne':''},
-                                                  'ihd':{ '$ne':''},
+                    copy['linked']['teleconsultation']='empty'
+                    
+                #DISCHARGEOUTCOME
+                count = db.data.find( {'$and':[ { 'scr_val':{ '$ne':''}, 
                                                   'data.id':data_id,
-                                                  'label':'outcomes' 
+                                                  'label':'dischargeoutcome' 
                                                  } ]} ).count()           
                                
                 if (count)==1:  
-                    copy['linked']['outcomes']='complete'     
+                    copy['linked']['dischargeoutcome']='complete'     
                 else:
-                    copy['linked']['outcomes']='incomplete' 
+                    copy['linked']['dischargeoutcome']='incomplete' 
                
                 
-                if db.data.find( {'$and':[ { 'label':'outcomes' ,
+                if db.data.find( {'$and':[ { 'label':'dischargeoutcome' ,
                                              'data.id':data_id
                                             } ]} ).count() ==0:
-                    copy['linked']['outcomes']='empty'
+                    copy['linked']['dischargeoutcome']='empty'
+                    
+                    
+                #AFTERDISCHARGEOUTCOME
+                count = db.data.find( {'$and':[ { 'creatinine_val':{ '$exists': 'true'},
+                                                  'patient_location':{ '$ne':''},
+                                                  'alive__grp':{ '$ne':''},
+                                                  'data.id':data_id,
+                                                  'label':'afterdischargeoutcome' 
+                                                 } ]} ).count()           
+                               
+                if (count)>0:  
+                    copy['linked']['afterdischargeoutcome']='complete'     
+                else:
+                    copy['linked']['afterdischargeoutcome']='incomplete' 
+               
+                
+                if db.data.find( {'$and':[ { 'label':'afterdischargeoutcome' ,
+                                             'data.id':data_id
+                                            } ]} ).count() ==0:
+                    copy['linked']['afterdischargeoutcome']='empty'
+                    
   
             hydrated.append( copy )
         return hydrated

@@ -346,11 +346,12 @@ def webform( request, username, repo_name ):
     if 'label' in first_field and isinstance(first_field['label'], dict):
         has_translations = True
         translations = first_field['label'].keys
-    elif first_field['type'] == 'group' and isinstance( first_field['children'][0]['label'], dict):
+    #elif first_field['type'] == 'group' and isinstance( first_field['children'][0]['label'], dict):
         # The first field is a group w/o a translation, so check if the first
         # question in the group has a translation.
-        has_translations = True
-        translations = first_field['children'][0]['label'].keys
+       # has_translations = True
+        #translations = first_field['children'][0]['label'].keys
+        #PM commented out 5/2016: throwing errors on new teleconsultation crf
     else:
         has_translations = False
         translations = []

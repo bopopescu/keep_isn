@@ -152,10 +152,12 @@
                 {% if field.type == 'group' %}
  				{% elif field.name == 'id' %} 
 		        	<!-- Make patient id non-editable. PM -->
-					 <span data-editor=""><input id="{{ field.name }}" name="{{ field.name }}" 	step="any" readonly="readonly"></span>
+		        	
+		        	<!--label>3. Patient id:</label><br-->
+					 <span data-editor=""><input id="{{ field.name }}" name="{{ field.name }}" 	step="any" readonly="readonly" ></span>
 
                 {% elif field.type == 'geopoint' %}
-                  <!-- TODO -->
+                  <!-- PM: remove and make country editable. TODO -->
                 {% elif field.type == 'integer' or field.type == 'decimal' or field.type == 'integer' %}
                   <span data-editor=""><input id="{{ field.name }}" name="{{ field.name }}" type="number" step="any"></span>
                 {% elif field.type == 'select one' or field.type == 'select one or specify other' %}

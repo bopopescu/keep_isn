@@ -21,7 +21,6 @@ media
 node_modules
 bower_components
 .bowerrc
-static
 
 credentials.py
 credentials.pyc
