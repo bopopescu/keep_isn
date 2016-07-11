@@ -35,9 +35,12 @@ class DataSerializer( object ):
                                                   fields=fields,
                                                   repo_id=repo,
                                                   data_id=copy[ 'id' ] )
-
+            tracker_id = 'data.' + repository.study.tracker
+            print "1. tracker_id is: ", tracker_id #PM
+            print "just before tracker "
             if repository.is_tracker and repository.study and linked:
                 link_dict = {}
+		print "tracker_id is: ", tracker_id #PM
                 tracker_id = 'data.' + repository.study.tracker
                 tracker_id= 'data.' + 'id' #PM
                 data_id = dict(row)['data'].get(repository.study.tracker)               
@@ -95,7 +98,8 @@ class DataSerializer( object ):
                                            } ]} ).count() ==0:
                    copy['linked']['initialclinicaldata']='empty'                                                                                               
                  '''  
-                #INTIALCLINICALDATA                     
+                
+                #1 INTIALCLINICALDATA                     
                 count = db.data.find( {'$and':[ { 'data.temperature':{ '$ne':''}, 
                                                   'data.first_assessed_scr':{ '$ne':''} ,
                                                   'data.specific_gravity':{ '$ne':''},
@@ -116,7 +120,7 @@ class DataSerializer( object ):
                     copy['linked']['initialclinicaldata']='empty'
                     
            
-                #DAILYCLINICALLABDATA
+                #2 DAILYCLINICALLABDATA
                 count = db.data.find( {'$and':[ { 'data.ph':{ '$ne':''}, 
                                                   'data.specific_gravity':{ '$ne':''} ,
                                                   'data.bun_val':{ '$ne':''},
@@ -137,7 +141,7 @@ class DataSerializer( object ):
                     copy['linked']['dailyclinicallabdata']='empty'                   
            
            
-                #TELECONSULTATION
+                #3 TELECONSULTATION
                 count = db.data.find( {'$and':[ { 'data.most_important':{ '$ne':''}, 
                                                   'data.id':data_id,
                                                   'label':'teleconsultation' 
@@ -154,32 +158,47 @@ class DataSerializer( object ):
                                             } ]} ).count() ==0:
                     copy['linked']['teleconsultation']='empty'
                     
-                #DISCHARGEOUTCOME
+                
+                #4 DISCHARGEOUTCOME
                 count = db.data.find( {'$and':[ { 'scr_val':{ '$ne':''}, 
                                                   'data.id':data_id,
-                                                  'label':'dischargeoutcome' 
+                                                  'label':'dischargeoutcome_pm' 
                                                  } ]} ).count()           
                                
                 if (count)==1:  
-                    copy['linked']['dischargeoutcome']='complete'     
+                    copy['linked']['dischargeoutcome_pm']='complete'     
                 else:
-                    copy['linked']['dischargeoutcome']='incomplete' 
+                    copy['linked']['dischargeoutcome_pm']='incomplete' 
                
                 
-                if db.data.find( {'$and':[ { 'label':'dischargeoutcome' ,
+                if db.data.find( {'$and':[ { 'label':'dischargeoutcome_pm' ,
                                              'data.id':data_id
                                             } ]} ).count() ==0:
-                    copy['linked']['dischargeoutcome']='empty'
+                    copy['linked']['dischargeoutcome_pm']='empty'
                     
                     
-                #AFTERDISCHARGEOUTCOME
-                count = db.data.find( {'$and':[ { 'creatinine_val':{ '$exists': 'true'},
-                                                  'patient_location':{ '$ne':''},
-                                                  'alive__grp':{ '$ne':''},
+                #5 AFTERDISCHARGEOUTCOME
+                '''count = db.data.find( {'$and':[ { #'noneses':{'$exists':'true'},
+                                                  'creatinine_unit':{ '$exists':'true'},
                                                   'data.id':data_id,
                                                   'label':'afterdischargeoutcome' 
-                                                 } ]} ).count()           
-                               
+                                                 } ] } ).count() 
+                '''
+                                                 
+                count=count= db.data.find({'data.creatinine_val':{'$exists':'true'}, #list values that should be in array
+                                           'data.after_discharge_assessment':{'$exists':'true'},
+                                           'data.alive_assessment':{'$exists':'true'},
+                                           'data.patient_location':{'$exists':'true'},
+                                           'data.currently_dialytic':{'$exists':'true'},
+                                           'data.recovery_status':{'$exists':'true'},
+                                           'data.creatinine_done':{'$exists':'true'},
+                                           'data.followup_scheduled':{'$exists':'true'},
+                                           'data.cause_of_death':{'$exists':'true'},
+                                           'data.autopsy_performed':{'$exists':'true'},
+                                           'data.id':data_id,
+                                           'label':'afterdischargeoutcome' 
+                                                 }  ).count() 
+                
                 if (count)>0:  
                     copy['linked']['afterdischargeoutcome']='complete'     
                 else:

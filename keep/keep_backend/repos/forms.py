@@ -22,7 +22,7 @@ class NewBatchRepoForm( forms.Form ):
     '''
         Create a new repo from a CSV file.
     '''
-    print "in NewBatchRepoForm class"
+    print "in NewBatchRepoForm class in /repos/forms.py"
     # File used to create/populate the new repo
     repo_file   = forms.FileField( required=True )
     # The study this repo is associated with

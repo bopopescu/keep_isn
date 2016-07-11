@@ -82,6 +82,8 @@ class RepoResource( ModelResource ):
             Copied from the tastypie source but modified so start with a list of
             repostiories that contain shared repos as well.
         '''
+
+	print "in api/repo.py get... ", request
         logged_in_user = request.user
         user = request.GET.get( 'user', None )
 
@@ -201,6 +203,7 @@ class RepoResource( ModelResource ):
         return self.create_response( request, response_data )
 
     def post_detail( self, request, **kwargs ):
+	print " in api/repo/post_detail ", request
 
         repo = Repository.objects.get( mongo_id=kwargs.get( 'mongo_id' ) )
         if repo is None:

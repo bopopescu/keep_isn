@@ -56,7 +56,7 @@ ANONYMOUS_USER_ID = -1
 
 AUTHENTICATION_BACKENDS = (
     # Set up 2Factor authentication settings
-    'twofactor.auth_backends.TwoFactorAuthBackend',
+    #PM'twofactor.auth_backends.TwoFactorAuthBackend',
     # Set up per-object permissions backend
     'guardian.backends.ObjectPermissionBackend',
 )

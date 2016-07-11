@@ -34,7 +34,7 @@ def insert_data_into_repo( request, repo_id ):
         Insert data from a CSV into a repo. This is relayed as a task to a
         Celery worker.
     '''
-    print "in insert_data_into_repo: going in"
+    print "in insert_data_into_repo: going in, the request is: ", request
     repo = Repository.objects.get( mongo_id=repo_id )
 
     # Place the task in the queue
@@ -272,7 +272,7 @@ def share_repo( request, repo_id ):
 
 @csrf_exempt
 def webform( request, username, repo_name ):
-    print "repo name: ", repo_name
+    print "in view webform, repo name: ", repo_name
     """
         Simply grab the survey data and send it on the webform. The webform
         will handle rendering and submission of the final data to the server.
@@ -385,7 +385,7 @@ def repo_viz( request, username, repo_name, filter_param=None ):
         Does the checks necessary to determine whether the current user has the
         authority to view the current repository.
     """
-
+    print " in /repos/views/repo_viz "
     # Grab the user/organization based on the username
     account = user_or_organization( username )
     if account is None:
