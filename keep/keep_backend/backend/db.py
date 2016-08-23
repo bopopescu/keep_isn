@@ -100,13 +100,50 @@ class DataSerializer( object ):
                  '''  
                 
                 #1 INTIALCLINICALDATA                     
-                count = db.data.find( {'$and':[ { 'data.temperature':{ '$ne':''}, 
+                '''count = db.data.find( {'$and':[ { 'data.temperature':{ '$ne':''}, 
                                                   'data.first_assessed_scr':{ '$ne':''} ,
                                                   'data.specific_gravity':{ '$ne':''},
                                                   'data.ph':{ '$ne':''},
                                                   'data.id':data_id,
                                                   'label':'initialclincaldata' 
-                                                 } ]} ).count()           
+                                                 } ]} ).count()  ''' 
+                                                 
+                count = db.data.find( {'$and':[ { 'patient_location':{ '$ne':''}, 
+                                                  'talk':{ '$ne':''} ,
+                                                  'neuro_deficit':{ '$ne':''},
+                                                  'temperature':{ '$ne':''},
+                                                  'systolic_bp':{ '$ne':''}, 
+                                                  'diastolic_bp':{ '$ne':''} ,
+                                                  'respiratory_rate':{ '$ne':''},
+                                                  'heart_rate':{ '$ne':''},
+                                                  'hydration_lungs':{ '$ne':''} ,
+                                                  'hydration_skin':{ '$ne':''},
+                                                  'hydration_cap':{ '$ne':''},
+                                                  'swelling':{ '$ne':''}, 
+                                                  'scr_assessment':{ '$ne':''} ,
+                                                  'hgb_assessment':{ '$ne':''},
+                                                  'urine_output':{ '$ne':''},
+                                                  'pre_aki_io_24hr':{ '$ne':''}, 
+                                                  'urine_color':{ '$ne':''} ,
+                                                  'urinalysis_done':{ '$ne':''},
+                                                  'infection_presence':{ '$ne':''},
+                                                  'fluid_therapy':{ '$ne':''} ,
+                                                  'diuretics':{ '$ne':''},
+                                                  'vasopressors':{ '$ne':''},
+                                                  'antibiotics':{ '$ne':''}, 
+                                                  'urinary':{ '$ne':''} ,
+                                                  'restriction':{ '$ne':''},
+                                                  'other_therapy':{ '$ne':''},
+                                                  'route_nutrition':{ '$ne':''}, 
+                                                  'dialysis_indication':{ '$ne':''} ,
+                                                  'dialyzed_so_far':{ '$ne':''},
+                                                  'teleconsultation':{ '$ne':''},
+                                                  'seen_by_physician':{ '$ne':''} ,
+                                                  'followup_scheduled':{ '$ne':''},
+                                                  'data.id':data_id,
+                                                  'label':'initial_clincal_data' 
+                                                 } ]} ).count()   
+                                                         
                               
                 if (count)>0:  
                     copy['linked']['initialclinicaldata']='complete'     
