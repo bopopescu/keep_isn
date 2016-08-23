@@ -1,4 +1,5 @@
 from bson import ObjectId
+
 from django.conf import settings
 from django.contrib.auth.models import User
 
@@ -35,11 +36,11 @@ class DataSerializer( object ):
                                                   repo_id=repo,
                                                   data_id=copy[ 'id' ] )
             tracker_id = 'data.' + repository.study.tracker
-            print "1. tracker_id is: ", tracker_id #PM
-            print "just before tracker "
+            #print "1. tracker_id is: ", tracker_id #PM
+            #print "just before tracker "
             if repository.is_tracker and repository.study and linked:
                 link_dict = {}
-		print "tracker_id is: ", tracker_id #PM
+		    #print "tracker_id is: ", tracker_id #PM
                 tracker_id = 'data.' + repository.study.tracker
                 tracker_id= 'data.' + 'id' #PM
                 data_id = dict(row)['data'].get(repository.study.tracker)               
@@ -82,11 +83,9 @@ class DataSerializer( object ):
                                                   'data.screening_day':{ '$ne':''},
                                                   #'data.country':{ '$ne':''},
                                                   'data.id':data_id,
-                                                  'label':'initialclinicaldata'
-                                                   
+                                                  'label':'initialclinicaldata' 
                                                   } ]} ).count() 
-                                                   
-                                          
+                                                                                           
                if (count)==1:  
                      copy['linked']['initialclinicaldata']='complete'     
                   else:
@@ -97,6 +96,44 @@ class DataSerializer( object ):
                                            } ]} ).count() ==0:
                    copy['linked']['initialclinicaldata']='empty'                                                                                               
                  '''  
+                
+                  
+                #1 INTIALPATIENTDATA                    
+                                                 
+                count = db.data.find( {'$and':[ { 'height':{ '$ne':''}, 
+                                                  'weight':{ '$ne':''} ,
+                                                  'patient_location':{ '$ne':''},
+                                                  'comorbidities':{ '$ne':''},
+                                                  'history_ckd':{ '$ne':''}, 
+                                                  'baseline_scr':{ '$ne':''} ,
+                                                  'ss_dehydration':{ '$ne':''},
+                                                  'ss_urinary':{ '$ne':''},
+                                                  'ss_infectious':{ '$ne':''} ,
+                                                  'ss_hypotension':{ '$ne':''},
+                                                  'ss_pain':{ '$ne':''},
+                                                  'ss_swelling':{ '$ne':''}, 
+                                                  'ss_trauma':{ '$ne':''} ,
+                                                  'ss_allergic':{ '$ne':''},
+                                                  'ss_poisoning':{ '$ne':''},
+                                                  'ss_animal':{ '$ne':''}, 
+                                                  'ss_pregnancy':{ '$ne':''} ,
+                                                  'ss_additional':{ '$ne':''},
+                                                  'risk_assessment_points':{ '$ne':''},
+                                                  'excl_chronic_dial':{ '$ne':''} ,
+                                                  'excl_func_transplant':{ '$ne':''},
+                                                   } ]} ).count()   
+                                                         
+                              
+                if (count)>22:  
+                    copy['linked']['initialclinicaldata']='complete'     
+                else:
+                    copy['linked']['initialclinicaldata']='incomplete' 
+               
+                
+                if db.data.find( {'$and':[ { 'label':'initialclinicaldata' ,
+                                             'data.id':data_id
+                                            } ]} ).count() ==0:
+                    copy['linked']['initialclinicaldata']='empty'
                 
                 #1 INTIALCLINICALDATA                     
                 '''count = db.data.find( {'$and':[ { 'data.temperature':{ '$ne':''}, 
@@ -144,7 +181,7 @@ class DataSerializer( object ):
                                                  } ]} ).count()   
                                                          
                               
-                if (count)>0:  
+                if (count)>29:  
                     copy['linked']['initialclinicaldata']='complete'     
                 else:
                     copy['linked']['initialclinicaldata']='incomplete' 
@@ -157,7 +194,7 @@ class DataSerializer( object ):
                     
            
                 #2 DAILYCLINICALLABDATA
-                count = db.data.find( {'$and':[ { 'data.ph':{ '$ne':''}, 
+                    ''' count = db.data.find( {'$and':[ { 'data.ph':{ '$ne':''}, 
                                                   'data.specific_gravity':{ '$ne':''} ,
                                                   'data.bun_val':{ '$ne':''},
                                                   'data.scr_value':{ '$ne':''},
@@ -165,9 +202,43 @@ class DataSerializer( object ):
                                                   'temperature':{ '$ne':''},
                                                   'data.id':data_id,
                                                   'label':'dailyclinicallabdata' 
-                                                 } ]} ).count()           
+                                                 } ]} ).count()  
+                                                 '''
+                                                            
+                count = db.data.find( {'$and':[ { 'patient_location':{ '$ne':''}, 
+                                                  'talk':{ '$ne':''} ,
+                                                  'neuro_deficit':{ '$ne':''},
+                                                  'temperature':{ '$ne':''},
+                                                  'systolic_bp':{ '$ne':''}, 
+                                                  'diastolic_bp':{ '$ne':''} ,
+                                                  'respiratory_rate':{ '$ne':''},
+                                                  'heart_rate':{ '$ne':''},
+                                                  'hydration_lungs':{ '$ne':''} ,
+                                                  'hydration_skin':{ '$ne':''},
+                                                  'hydration_cap':{ '$ne':''},
+                                                  'swelling':{ '$ne':''}, 
+                                                  'scr_assessment':{ '$ne':''} ,
+                                                  'hgb_assessment':{ '$ne':''},
+                                                  'urine_output':{ '$ne':''},
+                                                  'pre_aki_io_24hr':{ '$ne':''}, 
+                                                  'urine_color':{ '$ne':''} ,
+                                                  'urinalysis_done':{ '$ne':''},
+                                                  'infection_presence':{ '$ne':''},
+                                                  'fluid_therapy':{ '$ne':''} ,
+                                                  'diuretics':{ '$ne':''},
+                                                  'vasopressors':{ '$ne':''},
+                                                  'antibiotics':{ '$ne':''}, 
+                                                  'urinary':{ '$ne':''} ,
+                                                  'restriction':{ '$ne':''},
+                                                  'other_therapy':{ '$ne':''},
+                                                  'route_nutrition':{ '$ne':''}, 
+                                                  'dialysis_indication':{ '$ne':''} ,
+                                                  'dialyzed_so_far':{ '$ne':''},
+                                                  'data.id':data_id,
+                                                  'label':'daily_clincal_data' 
+                                                 } ]} ).count()  
                                
-                if (count)>0:  
+                if (count)>27:  
                     copy['linked']['dailyclinicallabdata']='complete'     
                 else:
                     copy['linked']['dailyclinicallabdata']='incomplete'             
@@ -178,12 +249,21 @@ class DataSerializer( object ):
            
            
                 #3 TELECONSULTATION
-                count = db.data.find( {'$and':[ { 'data.most_important':{ '$ne':''}, 
+                '''count = db.data.find( {'$and':[ { 'data.most_important':{ '$ne':''}, 
                                                   'data.id':data_id,
                                                   'label':'teleconsultation' 
-                                                 } ]} ).count()           
+                                                 } ]} ).count()  '''
+                count = db.data.find( {'$and':[ { 'etio_dehydration':{ '$ne':''}, 
+                                                  'develop_loc':{ '$ne':''} ,
+                                                  'fluid_therapy':{ '$ne':''},
+                                                  'route_nutrition':{ '$ne':''},
+                                                  'dialysis_indication':{ '$ne':''}, 
+                                                  'disposition_teleconsultation':{ '$ne':''} ,
+                                                  'days_to_return':{ '$ne':''},
+                                                  } ]} ).count()  
+          
                                
-                if (count)==1:  
+                if (count)==6:  
                     copy['linked']['teleconsultation']='complete'     
                 else:
                     copy['linked']['teleconsultation']='incomplete' 
@@ -196,12 +276,35 @@ class DataSerializer( object ):
                     
                 
                 #4 DISCHARGEOUTCOME
-                count = db.data.find( {'$and':[ { 'scr_val':{ '$ne':''}, 
+                '''count = db.data.find( {'$and':[ { 'scr_val':{ '$ne':''}, 
                                                   'data.id':data_id,
                                                   'label':'dischargeoutcome_pm' 
-                                                 } ]} ).count()           
+                                                 } ]} ).count()'''
+                         
+                count = db.data.find( {'$and':[ { 'patient_location':{ '$ne':''}, 
+                                                  'ip_interventions':{ '$ne':''} ,
+                                                  'why_no_dialysis':{ '$ne':''},
+                                                  'rrt_modality':{ '$ne':''},
+                                                  'rrt_complications':{ '$ne':''}, 
+                                                  'pd_complications':{ '$ne':''} ,
+                                                  'currently_on_dialysis':{ '$ne':''},
+                                                  'why_stop_dialysis':{ '$ne':''},
+                                                  'scr_val':{ '$ne':''} ,
+                                                  'biopsy_performed':{ '$ne':''},
+                                                  'recovery_status':{ '$ne':''},
+                                                  'alive_last':{ '$ne':''}, 
+                                                  'alive_discharge':{ '$ne':''} ,
+                                                  'cause_of_death':{ '$ne':''},
+                                                  'autopsy_performed':{ '$ne':''},
+                                                  'nephro_managed':{ '$ne':''}, 
+                                                  'hospital_stay':{ '$ne':''} ,
+                                                  'location_discharge':{ '$ne':''},
+                                                  'disposition':{ '$ne':''},
+                                                  'followup_scheduled':{ '$ne':''} ,
+                                                  'label':'discharge_outcome' 
+                                                 } ]} ).count()        
                                
-                if (count)==1:  
+                if (count)>19:  
                     copy['linked']['dischargeoutcome_pm']='complete'     
                 else:
                     copy['linked']['dischargeoutcome_pm']='incomplete' 
@@ -221,7 +324,7 @@ class DataSerializer( object ):
                                                  } ] } ).count() 
                 '''
                                                  
-                count=count= db.data.find({'data.creatinine_val':{'$exists':'true'}, #list values that should be in array
+                '''count=count= db.data.find({'data.creatinine_val':{'$exists':'true'}, #list values that should be in array
                                            'data.after_discharge_assessment':{'$exists':'true'},
                                            'data.alive_assessment':{'$exists':'true'},
                                            'data.patient_location':{'$exists':'true'},
@@ -233,9 +336,22 @@ class DataSerializer( object ):
                                            'data.autopsy_performed':{'$exists':'true'},
                                            'data.id':data_id,
                                            'label':'afterdischargeoutcome' 
-                                                 }  ).count() 
+                                                 }  ).count() '''
+                   
+                count = db.data.find( {'$and':[ { 'after_discharge_assessment':{ '$ne':''}, 
+                                                  'alive_assessment':{ '$ne':''} ,
+                                                  'patient_location':{ '$ne':''},
+                                                  'currently_dialytic':{ '$ne':''},
+                                                  'recovery_status':{ '$ne':''}, 
+                                                  'creatinine_done':{ '$ne':''} ,
+                                                  'followup_scheduled':{ '$ne':''},
+                                                  'cause_of_death':{ '$ne':''},
+                                                  'days_after_discharge':{ '$ne':''} ,
+                                                  'autopsy_performed':{ '$ne':''},
+                                                  'label':'after_discharge_outcome' 
+                                                 } ]} ).count()
                 
-                if (count)>0:  
+                if (count)>10:  
                     copy['linked']['afterdischargeoutcome']='complete'     
                 else:
                     copy['linked']['afterdischargeoutcome']='incomplete' 
@@ -245,8 +361,7 @@ class DataSerializer( object ):
                                              'data.id':data_id
                                             } ]} ).count() ==0:
                     copy['linked']['afterdischargeoutcome']='empty'
-                    
-  
+
             hydrated.append( copy )
         return hydrated
     
