@@ -43,7 +43,7 @@ def deploy():
         run( 'supervisorctl stop %s' % ( SUPERVISOR_NAME ) )
 
         # Pull latest code from git
-        run( 'git pull origin master' )
+        run( 'git pull origin main' )
 
         # Start up all processes again
         run( 'supervisorctl start all' )
